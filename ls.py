@@ -10,21 +10,31 @@ parser.add_argument('ts2host', type=str, help='This is the host of ts2', action=
 parser.add_argument('ts2port', type=int, help='This is the port of ts2', action='store')
 args = parser.parse_args(argv[1:])
 
-# host = socket.gethostname()
-# print(f'[S]: Host is - {host}')
-
-# create server socket to communicate with client
+# stuff as CLIENT for connecting to top level servers--------------------------------------------
+# create clint socket to communicate with ts1
 try:
-    ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print("[S]: Server socket created")
+    server_sock1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("[S]: Client socket for TS1 created")
 except socket.error as err:
     print("[S]: Couldn't create socket due to {}".format(err))
     exit()
 
-# choose a port for the server
-server_addr = (socket.gethostname(), args.port)
-ss.bind(server_addr)
-ss.listen(1)
+# create client socket to communicate with ts2
+try:
+    server_sock2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("[S]: Client socket 2 for TS2 created")
+except socket.error as err:
+    print('socket 2 open error: {} \n'.format(err))
+    exit()
+
+# connect to ts1 host
+server_addr1 = (args.ts1host, args.ts1port)
+server_sock1.connect(server_addr1)
+
+# connect to ts2 host
+server_addr2 = (args.ts2host, args.ts2port)
+server_sock2.connect(server_addr2)
+
 
 # print server information
 host = socket.gethostname()
@@ -32,19 +42,39 @@ print("[S]: The host is {}".format(host))
 localhost_ip = (socket.gethostbyname(host))
 print("[S]: Server IP: {}".format(localhost_ip))
 
+
+# stuff as SERVER for connecting to client-----------------------------------------------
+# Connect to client
+# Printing server info
+try:
+    ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = socket.gethostname()
+    localhost_ip = (socket.gethostbyname(host))
+    print()
+    print('[S]: LS Server socket created')
+    print('[S]: The host is {}'.format(host))
+    print('[S]: Server IP address is {}'.format(localhost_ip))
+except socket.error as err:
+    print("[S]: Couldn't create socket due to {}".format(err))
+    exit()
+
+# bind to address and listen for client
+server_addr = (host, args.port)
+ss.bind(server_addr)
+ss.listen(1)
+
 # accept a client
 csockid, addr = ss.accept()
 print("[S]: Got a connection, client is at {}".format(addr))
 
-connection, address = ss.accept()
 
-while True:
-    clientData = csockid.recv(512)
-    if not clientData:
-        break
-    clientData = clientData.decode('utf-8')
+#while True:
+    #clientData = csockid.recv(512)
+    #if not clientData:
+    #    break
+    #clientData = clientData.decode('utf-8')
     # send query to hash function
-    connection.sendall(clientData.encode('utf=8'))
+    #csockid.sendall(clientData.encode('utf=8'))
 
 # Close the server socket
 ss.close()

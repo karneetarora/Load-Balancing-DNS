@@ -28,12 +28,12 @@ with open(args.out_file, 'w') as write_file:
         # trim the line to avoid weird new line things
         line = line.strip()
         # now we write whatever the server tells us to the out_file
-        if line:
-            client_sock.sendall(line.encode('utf-8'))
-            answer = client_sock.recv(512)
+        #if line:
+            #client_sock.sendall(line.encode('utf-8'))
+            #answer = client_sock.recv(512)
             # decode answer
-            answer = answer.decode('utf-8')
-            write_file.write(answer + '\n')
+            #answer = answer.decode('utf-8')
+            #write_file.write(answer + '\n')
 
 # close the socket (note this will be visible to the other side)
 client_sock.close()
