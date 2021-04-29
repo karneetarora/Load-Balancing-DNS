@@ -67,14 +67,20 @@ ss.listen(1)
 csockid, addr = ss.accept()
 print("[S]: Got a connection, client is at {}".format(addr))
 
+with csockid:
+    while True:
+        clientData = csockid.recv(512)
+        if not clientData:
+            break
+        clientData = clientData.decode('utf-8')
 
-#while True:
-    #clientData = csockid.recv(512)
-    #if not clientData:
-    #    break
-    #clientData = clientData.decode('utf-8')
-    # send query to hash function
-    #csockid.sendall(clientData.encode('utf=8'))
+        # send query to hash function
+        # implement load balancer
+        # either send to server_sock1 or server_sock2
+        server_sock1.sendall(clientData.encode('utf-8'))
+        newClientData = server_sock1.recv(512)
+        newClientData = newClientData.decode('utf-8')
+        csockid.sendall(newClientData.encode('utf-8'))
 
 # Close the server socket
 ss.close()
