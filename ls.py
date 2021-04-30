@@ -78,11 +78,21 @@ with csockid:
         tsServer = hash(clientData[4] %2)
         # either send to server_sock1 or server_sock2
         if tsServer == 0:
-            server_sock1.sendall(clientData.encode('utf-8'))
-            newClientData = server_sock1.recv(512)
+            try:
+                server_sock1.sendall(clientData.encode('utf-8'))
+                newClientData = server_sock1.recv(512)
+            except socket.err:
+                #first server not working. so redirecting to next server
+                server_sock2.sendall(clientData.encode('utf-8'))
+                newClientData = server_sock2.recv(512)
         else:
-            server_sock2.sendall(clientData.encode('utf-8'))
-            newClientData = server_sock2.recv(512)
+            try:
+                server_sock2.sendall(clientData.encode('utf-8'))
+                newClientData = server_sock2.recv(512)
+            except socket.err:
+                #first server not working. so redirecting to next server
+                server_sock1.sendall(clientData.encode('utf-8'))
+                newClientData = server_sock1.recv(512)
         newClientData = newClientData.decode('utf-8')
         if len(newClientData) == 0:
             newClientData = f"{clientData} - Error:HOST NOT FOUND"
