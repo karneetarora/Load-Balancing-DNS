@@ -1,0 +1,27 @@
+READ ME - Project 3
+29 April 2021
+
+**0. Name & NETID:**
+Pranav Tailor (pst29)
+Karneet Arora (ksa66)
+Group - 36
+
+**1. Briefly discuss how you implemented the LS functionality of
+   tracking which TS responded to the query and timing out if neither
+   TS responded.
+-
+
+**2. Are there any known issues or functions that are not working?**
+- In project 2, I had a good bit of trouble implementing the part where if there is an invalid host,
+  it outputs an error message, so that still doesn't work after spending quite a bit of time on it.
+
+- Additionally, we could not figure out how to implement the timeout function. Tried to implement a multithreading
+  function and a multiprocessing function and neither would work properly so I completely removed it for
+  simplicity's sake.
+
+**3. What problems did you face developing code for this project?**
+- As indicated above, we had a hard time implementing some of the functionality in t
+
+
+**4. Around how long did you spend on this project?**
+20 hours
