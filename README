@@ -20,7 +20,8 @@ Group - 36
   simplicity's sake.
 
 **3. What problems did you face developing code for this project?**
-- As indicated above, we had a hard time implementing some of the functionality in t
+- As indicated above, we had a hard time implementing some of the functionality in terms of the timeout and host error.
+  Additionally, Karneet's laptop died while making changes that had to be recoded as it was lost. 
 
 
 **4. Around how long did you spend on this project?**
