@@ -82,8 +82,8 @@ with csockid:
             newClientData = server_sock1.recv(512)
         else:
             server_sock2.sendall(clientData.encode('utf-8'))
-            newClientData = server_sock1.recv(512)
-            newClientData = newClientData.decode('utf-8')
+            newClientData = server_sock2.recv(512)
+        newClientData = newClientData.decode('utf-8')
         if len(newClientData) == 0:
             newClientData = f"{clientData} - Error:HOST NOT FOUND"
         csockid.sendall(newClientData.encode('utf-8'))
