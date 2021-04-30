@@ -33,8 +33,8 @@ Group - 36
 
 **3. What problems did you face developing code for this project?**
 - As indicated above, we had a hard time implementing some of the functionality in terms of the timeout and host error.
-  Additionally, Karneet's laptop creashed while making changes that had to be recoded as it was lost.
-  He ended up buying a new laptop and had to reload all programs, software, and files.
+  Additionally, Karneet's laptop crashed while making changes that had to be recoded as it was lost.
+  He ended up buying a new laptop and had to reload all programs (inlcuding python itself), software, and files.
 
 
 **4. Around how long did you spend on this project?**
