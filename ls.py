@@ -10,6 +10,7 @@ parser.add_argument('ts2host', type=str, help='This is the host of ts2', action=
 parser.add_argument('ts2port', type=int, help='This is the port of ts2', action='store')
 args = parser.parse_args(argv[1:])
 
+
 # stuff as CLIENT for connecting to top level servers--------------------------------------------
 # create clint socket to communicate with ts1
 try:
@@ -74,12 +75,17 @@ with csockid:
             break
         clientData = clientData.decode('utf-8')
 
-        # send query to hash function
-        # implement load balancer
+        tsServer = hash(clientData[4] %2)
         # either send to server_sock1 or server_sock2
-        server_sock1.sendall(clientData.encode('utf-8'))
-        newClientData = server_sock1.recv(512)
-        newClientData = newClientData.decode('utf-8')
+        if tsServer == 0:
+            server_sock1.sendall(clientData.encode('utf-8'))
+            newClientData = server_sock1.recv(512)
+        else:
+            server_sock2.sendall(clientData.encode('utf-8'))
+            newClientData = server_sock1.recv(512)
+            newClientData = newClientData.decode('utf-8')
+        if len(newClientData) == 0:
+            newClientData = f"{clientData} - Error:HOST NOT FOUND"
         csockid.sendall(newClientData.encode('utf-8'))
 
 # Close the server socket
