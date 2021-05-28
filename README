@@ -1,1 +1,38 @@
+Overview:
++++++++++
+There are four programs: 
+  1. Client
+  2. Load-Balancing
+  3. Server (LS)
+  4. Two DNS Servers (TS1 and TS2)
 
+The client program makes the query (in the form of a hostname) to the LS. 
+LS then forwards the query to one of the servers, either TS1 or TS2. 
+LS must forward the same hostname to the same TS server as before 
+LS forwards aproximatly half of the queries to each server (TS1 or TS2), so the load is around equal. 
+
+
+Load Balancer(LS) design:
++++++++++
+The LS uses a hashing function to split the client's queries evenly and sends to one of the two servers.
+
+
+TS design:
++++++++++
+There are two TS servers which each maintain a DNS table consisting of
+2 fields:
+- Hostname
+- IP address(s)
+
+For each query received from the LS, each TS server first checks its DNS table.
+If the domain name is in its DNS table, it responds to the LS server immediatly.
+If the hostname's IP address is not in the local table, TS1 asks google (8.8.8.8) and TS2 asks cloudflare (1.1.1.1).
+
+
+How to Run Program:
++++++++++
+The programs must work with the following command lines:
+  python ts1.py ts1ListenPort
+  python ts2.py ts2ListenPort
+  python ls.py lsListenPort ts1Hostname ts1ListenPort ts2Hostname ts2ListenPort
+  python client.py lsHostname lsListenPort
