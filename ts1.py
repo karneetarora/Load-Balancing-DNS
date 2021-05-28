@@ -18,23 +18,21 @@ class Hostname():
 # Creating DNS table
 table = []
 def add_host(host, ip):
+    host = host.lower()
     host_name = Hostname(host, ip)
     table.append(host_name)
 
 
 # checks to see if hostname is in the DNS Table
-# if not, send dns request to Google
 def lookup(hostname):
+    hostname = hostname.lower()
     found = False
     for i in table:
         if i.host == hostname:
             found = True
-            return f'{i.host} {i.ip_address}'
+            return f'{i.ip_address}'
     if not found:
-        # send udp request to google for IP address
-
-        # add information sent from google to table, call add_host method
-        return f'{host} - NS'
+        return "0"
 
 
 # Connect to LS
@@ -129,25 +127,27 @@ while True:
     if not clientData:
         break
     clientData = clientData.decode('utf-8')
+    inquiry = lookup(clientData)
 
-    print(clientData)
-    DNSquery = domainToHex(clientData)
+    if inquiry == "0":
+        DNSquery = domainToHex(clientData)
 
-    response = send_udp_message(DNSquery, "8.8.8.8", 53)
-    finResponse = format_hex(response)
+        response = send_udp_message(DNSquery, "8.8.8.8", 53)
+        finResponse = format_hex(response)
 
-    finResponseList = finResponse.split()
-    res = finResponseList[-4:]
+        finResponseList = finResponse.split()
+        res = finResponseList[-4:]
 
-    final = []
-    for i in range(len(res)):
-        final.append(int(res[i], 16))
+        final = []
+        for i in range(len(res)):
+            final.append(int(res[i], 16))
 
-    finalIP = ""
-    for element in final:
-        finalIP += str(element)
-        finalIP += '.'
-    finalIP = finalIP[:-1]
+        finalIP = ""
+        for element in final:
+            finalIP += str(element)
+            finalIP += '.'
+        finalIP = finalIP[:-1]
+        add_host(clientData, finalIP)
 
     csockid.send(finalIP.encode('utf-8'))
 
