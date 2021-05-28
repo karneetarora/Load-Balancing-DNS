@@ -18,23 +18,21 @@ class Hostname():
 # Creating DNS table
 table = []
 def add_host(host, ip):
+    host = host.lower()
     host_name = Hostname(host, ip)
     table.append(host_name)
 
 
 # checks to see if hostname is in the DNS Table
-# if not, send dns request to cloudflare
 def lookup(hostname):
+    hostname = hostname.lower()
     found = False
     for i in table:
         if i.host == hostname:
             found = True
-            return f'{i.host} {i.ip_address}'
+            return f'{i.ip_address}'
     if not found:
-        # send udp request to cloudflare for IP address
-
-        # add information sent from google to table, call add_host method
-        return f'{host} - NS'
+        return "0"
 
 
 # Connect to LS
@@ -128,11 +126,12 @@ while True:
     if not clientData:
         break
     clientData = clientData.decode('utf-8')
+    inquiry = lookup(clientData)
 
-    print(clientData)
-    DNSquery = domainToHex(clientData)
+    if inquiry == "0":
+        DNSquery = domainToHex(clientData)
 
-    response = send_udp_message(DNSquery, "8.8.8.8", 53)
+    response = send_udp_message(DNSquery, "1.1.1.1", 53)
     finResponse = format_hex(response)
 
     finResponseList = finResponse.split()
@@ -148,11 +147,11 @@ while True:
         finalIP += '.'
     finalIP = finalIP[:-1]
 
+    add_host(clientData, finalIP)
+
     csockid.send(finalIP.encode('utf-8'))
 
 
 # Close the server socket
 ss.close()
 exit()
-
-
