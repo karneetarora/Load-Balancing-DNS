@@ -14,7 +14,7 @@ LS forwards aproximatly half of the queries to each server (TS1 or TS2), so the 
 
 Load Balancer(LS) design:
 +++++++++
-The LS uses a hashing function to split the client's queries evenly and sends to one of the two servers.
+The LS uses a hashing function to split the client's queries evenly and forwards the query to one of the two servers.
 
 
 TS design:
